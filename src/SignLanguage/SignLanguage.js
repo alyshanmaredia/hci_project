@@ -7,7 +7,8 @@ import Webcam from "react-webcam";
 import "../App.css";
 import { drawHand } from "../Utilities/Utilities";
 import './SignLanguage.css';
-import one from '../img/one.png';
+
+
 import two from '../img/hold.png';
 import three from '../img/back.png';
 import four from '../img/four.png';
@@ -18,7 +19,7 @@ import eight from '../img/exit.png';
 import nine from '../img/hold.png';
 import exit from '../img/zero.png';
 
-import {oneGesture} from "../digitGesture/One"; 
+ 
 import {twoGesture} from '../digitGesture/Two';
 import {threeGesture} from '../digitGesture/Three';
 import {fourGesture} from '../digitGesture/Four';
@@ -28,21 +29,19 @@ import {sevenGesture} from '../digitGesture/Seven';
 import {eightGesture} from '../digitGesture/Eight';
 import {nineGesture} from '../digitGesture/Nine';
 import {backGesture} from '../digitGesture/Zero';
-import {exitGesture} from '../digitGesture/Exit';
-///////// NEW STUFF IMPORTS
+
+
 import * as fp from "fingerpose";
 
 
-///////// NEW STUFF IMPORTS
+
 
 function SignLanguage() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
-  ///////// NEW STUFF ADDED STATE HOOK
   const [emoji, setEmoji] = useState(null);
   const images = { exit:exit,
-                    one:one,
                     two:two,
                     three:three, 
                     four:four,
@@ -51,34 +50,33 @@ function SignLanguage() {
                     seven:seven,
                     eight:eight,
                     nine:nine   };
-  ///////// NEW STUFF ADDED STATE HOOK
 
   const runHandpose = async () => {
     const net = await handpose.load();
     console.log("Handpose model loaded.");
-    //  Loop and detect hands
+    
     setInterval(() => {
       detect(net);
     }, 10);
   };
 
   const detect = async (net) => {
-    // Check data is available
+    
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
-      // Get Video Properties
+      
       const video = webcamRef.current.video;
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
 
-      // Set video width
+      
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      // Set canvas height and width
+      
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
 
@@ -86,11 +84,9 @@ function SignLanguage() {
       const hand = await net.estimateHands(video);
       // console.log(hand);
 
-      ///////// NEW STUFF ADDED GESTURE HANDLING
 
       if (hand.length > 0) {
         const GE = new fp.GestureEstimator([
-          oneGesture,
           twoGesture,
           threeGesture,
           fourGesture,
@@ -111,15 +107,12 @@ function SignLanguage() {
           const maxConfidence = confidence.indexOf(
             Math.max.apply(null, confidence)
           );
-          // console.log(gesture.gestures[maxConfidence].name);
+         
           setEmoji(gesture.gestures[maxConfidence].name);
           console.log(emoji);
         }
       }
 
-      ///////// NEW STUFF ADDED GESTURE HANDLING
-
-      // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
       drawHand(hand, ctx);
     }
@@ -162,7 +155,7 @@ function SignLanguage() {
             height: 480,
           }}
         />
-        {/* NEW STUFF */}
+        {}
         {emoji !== null ? (
           <img
             src={images[emoji]}
@@ -181,7 +174,7 @@ function SignLanguage() {
           ""
         )}
 
-        {/* NEW STUFF */}
+        {}
       </header>
     </div>
   );
