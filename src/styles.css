@@ -1,0 +1,13 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.navbar {
+  background-color: #41436a;
+}
+
+a.nav-link,
+a.navbar-brand {
+  color: aliceblue;
+}
